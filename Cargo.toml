@@ -1,0 +1,47 @@
+[package]
+name = "synth"
+version = "0.1.0"
+edition = "2021"
+authors = ["Beat Weber <beat.weber@bithawk.ch>"]
+license = "GPL-3.0-or-later"
+description = "Drift - a polyphonic hybrid additive/subtractive synthesizer"
+
+[workspace]
+members = ["xtask"]
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[features]
+default = []
+# Builds a JACK/ALSA standalone app alongside the plugin, which is the quickest
+# way to hear a change without opening a DAW.
+standalone = ["nih_plug/standalone"]
+
+[[bin]]
+name = "drift"
+required-features = ["standalone"]
+
+[dependencies]
+nih_plug = { git = "https://github.com/robbert-vdh/nih-plug.git", rev = "f36931f7af4646065488a9845d8f8c2f95252c23", features = [
+    "assert_process_allocs",
+] }
+nih_plug_egui = { git = "https://github.com/robbert-vdh/nih-plug.git", rev = "f36931f7af4646065488a9845d8f8c2f95252c23" }
+atomic_float = "0.1"
+triple_buffer = "6.0"
+
+# Only for `examples/gui_preview.rs`, which opens the editor in a plain window
+# without a host. Same revisions as nih_plug_egui uses internally.
+[dev-dependencies]
+baseview = { git = "https://github.com/RustAudio/baseview.git", rev = "9a0b42c09d712777b2edb4c5e0cb6baf21e988f0" }
+egui-baseview = { git = "https://github.com/BillyDM/egui-baseview.git", rev = "ec70c3fe6b2f070dcacbc22924431edbe24bd1c0", features = ["opengl"] }
+
+[profile.release]
+lto = "fat"
+codegen-units = 1
+opt-level = 3
+
+[profile.profiling]
+inherits = "release"
+debug = true
+strip = "none"
