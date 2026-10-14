@@ -24,15 +24,18 @@ A polyphonic hybrid additive/subtractive synthesizer plugin for Linux, built wit
 RUSTFLAGS="-C target-cpu=x86-64-v3" cargo xtask bundle synth --release
 ```
 
-Artifacts land in `target/bundled/`. Install with:
+Artifacts land in `target/bundled/`. To build and install in one step:
 
 ```sh
-mkdir -p ~/.clap ~/.vst3
-ln -sfn "$PWD/target/bundled/Drift.clap" ~/.clap/Drift.clap
-ln -sfn "$PWD/target/bundled/Drift.vst3" ~/.vst3/Drift.vst3
+./install.sh               # copy to ~/.clap and ~/.vst3
+./install.sh --link        # symlink instead, so later rebuilds need no reinstall
+./install.sh --system      # /usr/lib/clap and /usr/lib/vst3, via sudo
+./install.sh --uninstall   # remove (combine with --system for the system folders)
 ```
 
-The symlinks mean later rebuilds need no reinstall.
+`--clap` or `--vst3` limits the install to one format, and `--no-build` installs
+the existing bundles. The build targets x86-64-v3 (AVX2); for older CPUs run
+`TARGET_CPU=x86-64 ./install.sh`.
 
 **Use the CLAP build.** There is an [open nih-plug
 issue](https://github.com/robbert-vdh/nih-plug/issues/271) where VST3 editors
