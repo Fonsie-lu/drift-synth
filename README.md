@@ -27,9 +27,9 @@ RUSTFLAGS="-C target-cpu=x86-64-v3" cargo xtask bundle synth --release
 Artifacts land in `target/bundled/`. To build and install in one step:
 
 ```sh
-./install.sh               # copy to ~/.clap and ~/.vst3
-./install.sh --link        # symlink instead, so later rebuilds need no reinstall
-./install.sh --system      # /usr/lib/clap and /usr/lib/vst3, via sudo
+./install.sh               # symlink into ~/.clap and ~/.vst3; later rebuilds need no reinstall
+./install.sh --copy        # copy instead of symlink
+./install.sh --system      # copy to /usr/lib/clap and /usr/lib/vst3, via sudo
 ./install.sh --uninstall   # remove (combine with --system for the system folders)
 ```
 
